@@ -5,9 +5,9 @@
 #include <math.h>
 #include <iostream>
 
-class MotorControl {
+class MotorControl {// used to controls the drive motors 
 public:
-  void BrakeAll(brakeType mode) {
+  void BrakeAll(brakeType mode) {// applies a brake type to all motors 
     lF.stop(mode);
     lB.stop(mode);
     lM.stop(mode);
@@ -15,33 +15,33 @@ public:
     rB.stop(mode);
     rM.stop(mode);
   }
-  void BrakeL(brakeType mode) {
+  void BrakeL(brakeType mode) {// applies brake type to left motors for redunentcy
     lF.stop(mode);
     lB.stop(mode);
     lM.stop(mode);
   }
-  void BrakeR(brakeType mode) {
+  void BrakeR(brakeType mode) {// applies brake type to right motors for redunentcy
     rF.stop(mode);
     rB.stop(mode);
     rM.stop(mode);
   }
-  void setVel(int Lv, int Rv, velocityUnits V) {
+  void setVel(int Lv, int Rv, velocityUnits V) {// sets the velocity for all motors
     lF.setVelocity(Lv, V); // set the motors to the intended speed
     lB.setVelocity(Lv, V);
     lM.setVelocity(Lv, V);
-    rF.setVelocity(Lv, V);
-    rB.setVelocity(Lv, V);
-    rM.setVelocity(Lv, V);
+    rF.setVelocity(Rv, V);
+    rB.setVelocity(Rv, V);
+    rM.setVelocity(Rv, V);
   }
-  void printVal() {
-    std::cout << "lF = " << lF.value() << std::endl;
-    std::cout << "lB = " << lB.value() << std::endl;
-    std::cout << "lM = " << lM.value() << std::endl;
-    std::cout << "rF = " << rF.value() << std::endl;
-    std::cout << "rB = " << rB.value() << std::endl;
-    std::cout << "rM = " << rM.value() << std::endl;
+  void printVal(rotationUnits val) {// prints the value of the motors to terminal
+    std::cout << "lF = " << lF.position(val) << std::endl;
+    std::cout << "lB = " << lB.position(val) << std::endl;
+    std::cout << "lM = " << lM.position(val) << std::endl;
+    std::cout << "rF = " << rF.position(val) << std::endl;
+    std::cout << "rB = " << rB.position(val) << std::endl;
+    std::cout << "rM = " << rM.position(val) << std::endl;
   }
-  void Move(int Lp, int Rp) {
+  void Move(int Lp, int Rp) {// spins all teh drive motors @ a velocity 
     lF.spin(fwd, Lp, voltageUnits::volt);
     lB.spin(fwd, Lp, voltageUnits::volt);
     lM.spin(fwd, Lp, voltageUnits::volt);
@@ -49,7 +49,7 @@ public:
     rB.spin(fwd, Rp, voltageUnits::volt);
     rM.spin(fwd, Rp, voltageUnits::volt);
   }
-  void reset() {
+  void reset() {// sets the position to 0 of all motors 
     lF.setPosition(0, rotationUnits::raw);
     rF.setPosition(0, rotationUnits::raw);
     lB.setPosition(0, rotationUnits::raw);
@@ -57,7 +57,7 @@ public:
     lM.setPosition(0, rotationUnits::raw);
     rM.setPosition(0, rotationUnits::raw);
   }
-  void setPos(int L, int R) {
+  void setPos(int L, int R) {// sets the positions of all motors 
     lF.setPosition(L, rotationUnits::raw);
     rF.setPosition(R, rotationUnits::raw);
     lB.setPosition(L, rotationUnits::raw);
@@ -69,29 +69,30 @@ public:
 
 MotorControl DriveMotors;
 
-class LiftShortcut {
+class LiftShortcut {// used to optimized the lift in auton
 
 public:
-  void Max(int vel, bool wait) {
+  void Max(int vel, bool wait) {// sets the lift to the max height 
     Lift.rotateTo(1.6, rotationUnits::rev, vel, velocityUnits::pct, wait);
   }
 
-  void Min(int vel, bool wait) {
+  void Min(int vel, bool wait) {// sets the lift to the lowest point
     Lift.rotateTo(0, rotationUnits::rev, vel, velocityUnits::pct, wait);
   }
 
-  void Score(int vel, bool wait) {
+  void Score(int vel, bool wait) {// moves the lift to a half way point for scoring mgoals in skills
     Lift.rotateTo(1, rev, vel, velocityUnits::pct, wait);
   }
 
-  void Idle(int vel, bool wait) {
+  void Idle(int vel, bool wait) {// raises the lift in order to intake pringles and to turn with a mgola in clamp
     Lift.rotateTo(.3, rev, vel, velocityUnits::pct, wait);
   }
-  void ClearWall(int vel, bool wait) {
+  void ClearWall(int vel, bool wait) {// raises the lift to clear the wall for prog skills
     Lift.rotateTo(1.3, rev, vel, velocityUnits::pct, wait);
   }
 
-  void setPos(int pos) { Lift.setPosition(0, rotationUnits::rev); }
+  //sets the lift so a position
+  void setPos(int pos) { Lift.setPosition(pos, rotationUnits::rev); }
 };
 
 LiftShortcut aL;
