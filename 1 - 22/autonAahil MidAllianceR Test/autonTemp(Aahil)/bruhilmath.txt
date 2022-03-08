@@ -1,0 +1,22 @@
+starting pos: (129.2, 23.2)
+
+end position x axis: x = 70.3
+
+end position y axis: y = 70.3
+
+
+a^2 + b^2 = c^2
+
+(70.3-129.2)^2 + (70.3-23.2)^2 = sqrt (5687.62) = 75.4 inches to middle goal
+
+Manual PID Moment: (For grabbing middle goal)
+75.4-5.98 = 69.420 inches of full velocity
+5.98 inches of half velocity
+
+
+x-axis distance from middle to alliance: (105.7-70.3) = 35.4 inches
+
+angling to reach completely horizontal: (starts at 135 degrees to get to middle goal)) 180-135 = 45 degrees
+(change this if needed alan, but i think it should work)
+
+y-axis distance from middle to alliance: (46.8-11.6) = 35.2 inches
