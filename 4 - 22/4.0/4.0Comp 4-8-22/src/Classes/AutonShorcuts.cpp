@@ -1,0 +1,139 @@
+#include "vex.h"
+#include "Classes.h"
+
+// Lift Shortcuts
+void LiftShortcut::Max(int vel, bool wait) { // raises the lift to the max height
+  Lift.rotateTo(1.6, rotationUnits::rev, vel, velocityUnits::pct, wait);
+}
+
+void LiftShortcut::Min(int vel, bool wait) { // returns to 0 the lowest point
+  Lift.rotateTo(0, rotationUnits::rev, vel, velocityUnits::pct, wait);
+}
+
+void LiftShortcut::Score(int vel, bool wait) { // half way from max height used to help balance platform
+  Lift.rotateTo(1, rev, vel, velocityUnits::pct, wait);
+}
+
+void LiftShortcut::Idle(
+    int vel, bool wait) { //  raises lift to allow pringle intake to to sping and for pringles to slide under lift
+  Lift.rotateTo(.4, rev, vel, velocityUnits::pct, wait);
+}
+void LiftShortcut::ClearWall(int vel, bool wait) { // raises lift to clear the wall with a mgoal
+  Lift.rotateTo(1.3, rev, vel, velocityUnits::pct, wait);
+}
+
+void LiftShortcut::setPos(int pos) { // sets the position of the lift
+  Lift.setPosition(0, rotationUnits::rev);
+}
+
+//Clamp Shortcuts
+void ClampShortcuts::Open() { // opens clamps and waits to make sure clamp opens
+  Clamp.set(true); // opens clamp
+
+  wait(100, msec); // waits
+
+  closed = false; // sets clamp
+}
+
+void ClampShortcuts::Cloes() { // closes clamp and waits so that its full closed
+  Clamp.set(false); // closes clamp
+
+  wait(100, msec); // waits
+
+  closed = true; // sets state of the clamp to close (true)
+}
+
+void ClampShortcuts::CF() { Clamp.set(state); } // closes clamp without delay
+
+void ClampShortcuts::OF() { Clamp.set(true); } // opens clamp without delay
+
+// BackLift Shortcuts
+void BackLiftShortcuts::Open() { // opens the bL with a delay
+  bC.set(!state);
+  bW.set(state);
+
+  wait(100, msec);
+
+  bLOff = true;
+}
+
+void BackLiftShortcuts::Close() { // closes bL with delay
+  bC.set(state);
+  bW.set(!state);
+
+  wait(100, msec);
+
+  bLOff = false;
+}
+void BackLiftShortcuts::CF() { // opens bL without delay
+  bC.set(state);
+  bW.set(!state);
+
+  bLOff = true;
+}
+void BackLiftShortcuts::OF() { // closes bL without delay
+  bC.set(!state);
+  bW.set(state);
+
+  bLOff = false;
+}
+
+// Pringle Shortcuts
+void PringleShortcuts::Intake(int X, bool Wait) { // spins the pringle intake for X amount of msec
+  pringle.spin(reverse, 400, rpm);
+  wait(X, msec);
+  pringle.stop();
+}
+
+void PringleShortcuts::Outtake(int X, bool Wait) { // spins the pringle Outtake for X amount of msec
+  pringle.spin(fwd, 400, rpm);
+  wait(X, msec);
+  pringle.stop();
+}
+
+void PringleShortcuts::On(directionType dir){
+  pringle.spin(dir, 400, rpm);
+}
+
+void PringleShortcuts::Off(){
+  pringle.stop();
+}
+
+// Drivebase control
+void DriveBaseControler::Brake(vex::brakeType mode){
+  lF.stop(mode);
+  lB.stop(mode);
+  lM.stop(mode);
+  rF.stop(mode);
+  rB.stop(mode);
+  rM.stop(mode);
+}
+
+void DriveBaseControler::Move(int L, int R){
+  lF.spin(fwd, L, voltageUnits::volt);
+  lB.spin(fwd, L, voltageUnits::volt);
+  lM.spin(fwd, L, voltageUnits::volt);
+  rF.spin(fwd, R, voltageUnits::volt);
+  rB.spin(fwd, R, voltageUnits::volt);
+  rM.spin(fwd, R, voltageUnits::volt);
+}
+
+void DriveBaseControler::Reset(){
+  lF.resetRotation();
+  rF.resetRotation();
+  lB.resetRotation();
+  rB.resetRotation();
+  lM.resetRotation();
+  rM.resetRotation();
+}
+
+void DriveBaseControler::MoveL(int L){
+  lF.spin(fwd, L, voltageUnits::volt);
+  lB.spin(fwd, L, voltageUnits::volt);
+  lM.spin(fwd, L, voltageUnits::volt);
+}
+void DriveBaseControler::MoveR(int R){
+  rF.spin(fwd, R, voltageUnits::volt);
+  rB.spin(fwd, R, voltageUnits::volt);
+  rM.spin(fwd, R, voltageUnits::volt);
+}
